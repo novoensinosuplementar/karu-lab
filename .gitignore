@@ -1,0 +1,15 @@
+# Pasta do ambiente virtual
+venv/
+
+# Banco de dados SQLite
+db.sqlite3
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Configurações do VS Code
+.vscode/
+
+# Logs
+*.log
