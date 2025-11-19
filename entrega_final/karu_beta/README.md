@@ -104,7 +104,7 @@ Implementar um modelo simples que analisa as respostas de algumas semanas e:
 ---
 
 ## 📁 Estrutura de Arquivos Esperada
-
+```
 karu-beta
 /
 ├── README.md (este arquivo)
@@ -127,7 +127,7 @@ karu-beta
     ├── analise_ml.ipynb
     └── modelo.py
 
-
+```
 
 ---
 
