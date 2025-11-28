@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas Medicações{% endblock %}
+
+{# Título do Header Superior #}
+{% block header_title %}Gerenciar Medicações{% endblock %}
+
+{% block content %}
+
+<!-- Cabeçalho da Página -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">Lista de Medicações</h1>
+        <p class="text-slate-500 text-sm">Cadastre e gerencie os medicamentos e dosagens.</p>
+    </div>
+
+    <div class="flex gap-2">
+        <!-- Botão de Filtro (Visual) -->
+        <button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+            <i class="fa-solid fa-filter"></i>
+        </button>
+        
+        <!-- Botão Novo -->
+        <a href="{% url 'criar_medicacao' %}" class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors shadow-sm shadow-brand-200">
+            <i class="fa-solid fa-plus"></i>
+            <span>Nova Medicação</span>
+        </a>
+    </div>
+</div>
+
+<!-- Card da Tabela -->
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500 tracking-wider">
+                    <th class="p-4">
+                        <i class="fa-solid fa-prescription-bottle-medical mr-1"></i> Nome
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-solid fa-weight-scale mr-1"></i> Dosagem
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-solid fa-repeat mr-1"></i> Frequência
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-solid fa-syringe mr-1"></i> Via
+                    </th>
+                    <th class="p-4 text-right">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-100">
+                {% for m in medicacoes %}
+                <tr class="hover:bg-slate-50 transition-colors group">
+                    
+                    <!-- Nome -->
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-pills"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">{{ m.nome }}</span>
+                        </div>
+                    </td>
+
+                    <!-- Dosagem -->
+                    <td class="p-4">
+                        <span class="inline-block bg-slate-100 text-slate-600 px-2 py-1 rounded text-sm font-medium border border-slate-200">
+                            {{ m.dosagem }}
+                        </span>
+                    </td>
+
+                    <!-- Frequência -->
+                    <td class="p-4 text-slate-600 text-sm">
+                        {{ m.frequencia }}
+                    </td>
+
+                    <!-- Via -->
+                    <td class="p-4">
+                        <!-- Badge simples para a Via -->
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 border border-brand-100">
+                            {{ m.via }}
+                        </span>
+                    </td>
+
+                    <!-- Ações -->
+                    <td class="p-4 text-right">
+                        <a href="{% url 'editar_medicacao' m.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition-all shadow-sm" title="Editar">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <!-- Estado Vazio -->
+                <tr>
+                    <td colspan="5" class="p-12 text-center">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400 text-2xl">
+                                <i class="fa-solid fa-tablets"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-slate-800">Nenhuma medicação cadastrada</h3>
+                            <p class="text-slate-500 max-w-xs mx-auto mt-1 mb-4 text-sm">
+                                Comece adicionando os medicamentos para habilitar lembretes e controle de estoque.
+                            </p>
+                            <a href="{% url 'criar_medicacao' %}" class="text-brand-600 font-medium hover:underline text-sm">
+                                Cadastrar primeira medicação &rarr;
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

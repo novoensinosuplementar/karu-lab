@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Medicação{% endblock %}
+
+{% block header_title %}Formulário de Medicação{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto">
+    <!-- Botão Voltar -->
+    <a href="{% url 'listar_medicacoes' %}" class="inline-flex items-center text-slate-500 hover:text-brand-600 mb-6 transition-colors text-sm font-medium">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Voltar para Lista
+    </a>
+
+    <!-- Card do Formulário -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        
+        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+            <h2 class="text-xl font-bold text-slate-800">{{ titulo }}</h2>
+            <p class="text-slate-500 text-sm mt-1">Preencha os dados do medicamento abaixo.</p>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Renderização dos Campos -->
+                <div class="space-y-5">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <!-- Label Estilizada -->
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        
+                        <!-- Campo (Input) -->
+                        <div class="relative">
+                            {{ field }}
+                            <!-- Ícone opcional se quiser forçar via CSS absolute, mas deixaremos simples -->
+                        </div>
+
+                        <!-- Ajuda / Help Text -->
+                        {% if field.help_text %}
+                            <p class="mt-1 text-xs text-slate-500">{{ field.help_text }}</p>
+                        {% endif %}
+
+                        <!-- Erros de Validação -->
+                        {% if field.errors %}
+                            <div class="mt-1 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-100">
+                                {% for error in field.errors %}
+                                    <p class="flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Rodapé com Ações -->
+                <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+                    <a href="{% url 'listar_medicacoes' %}" class="px-5 py-2.5 text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-800 rounded-lg font-medium transition-colors">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="px-6 py-2.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 focus:ring-4 focus:ring-brand-100 transition-all shadow-sm shadow-brand-200 flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i>
+                        Salvar Dados
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT MÁGICO PARA ESTILIZAR INPUTS DO DJANGO -->
+<!-- Como não estamos editando forms.py, este JS aplica as classes do Tailwind nos inputs padrões -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleciona todos os inputs, selects e textareas dentro do formulário
+        const inputs = document.querySelectorAll('form input[type="text"], form input[type="number"], form input[type="email"], form input[type="date"], form input[type="time"], form select, form textarea');
+        
+        inputs.forEach(input => {
+            // Adiciona classes de estilo do Tailwind
+            input.classList.add(
+                'w-full', 
+                'rounded-lg', 
+                'border-slate-300', 
+                'text-slate-700',
+                'placeholder-slate-400',
+                'focus:border-brand-500', 
+                'focus:ring-brand-500', 
+                'shadow-sm',
+                'transition-colors',
+                'py-2.5',
+                'px-3'
+            );
+            
+            // Se for Checkbox é diferente
+            if(input.type === 'checkbox') {
+                input.classList.remove('w-full', 'border-slate-300');
+                input.classList.add('rounded', 'text-brand-600', 'focus:ring-brand-500', 'w-5', 'h-5', 'border-gray-300');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

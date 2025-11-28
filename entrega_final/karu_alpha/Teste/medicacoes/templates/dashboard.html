@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Painel - Karu{% endblock %}
+
+{# Define o título que aparece no topo da página (Header do base.html) #}
+{% block header_title %}Visão Geral{% endblock %}
+
+{% block content %}
+    <!-- Seção de Boas-vindas -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-800 mb-2">Bem-vindo ao Sistema Karu!</h1>
+        <p class="text-slate-500">Selecione uma das opções abaixo para gerenciar as atividades.</p>
+    </div>
+
+    <!-- Grid de Navegação (Cards) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        
+        <!-- Card: Medicações -->
+        <a href="{% url 'listar_medicacoes' %}" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-blue-200 transition-all duration-200 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-pills"></i>
+                </div>
+                <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-1 rounded">Gerenciar</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Medicações</h3>
+            <p class="text-slate-500 text-sm mt-auto">Cadastre e edite medicamentos e dosagens.</p>
+        </a>
+
+        <!-- Card: Lembretes -->
+        <a href="{% url 'listar_lembretes' %}" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-orange-200 transition-all duration-200 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-1 rounded">Alertas</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Lembretes</h3>
+            <p class="text-slate-500 text-sm mt-auto">Configure horários e alarmes automáticos.</p>
+        </a>
+
+        <!-- Card: Estoque -->
+        <a href="{% url 'listar_estoque' %}" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-emerald-200 transition-all duration-200 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-1 rounded">Controle</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Estoque</h3>
+            <p class="text-slate-500 text-sm mt-auto">Visualize e controle a quantidade disponível.</p>
+        </a>
+
+        <!-- Card: Registros -->
+        <a href="{% url 'listar_registros' %}" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-purple-200 transition-all duration-200 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                </div>
+                <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-1 rounded">Histórico</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Registros</h3>
+            <p class="text-slate-500 text-sm mt-auto">Histórico completo de doses administradas.</p>
+        </a>
+
+    </div>
+
+    <!-- Área de Acesso Rápido (ATUALIZADA) -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+        <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-rocket text-slate-400"></i> Ações Rápidas
+        </h3>
+        
+        <!-- Grid de Botões Coloridos -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <!-- Botão Nova Medicação -->
+            <a href="{% url 'criar_medicacao' %}" class="flex items-center justify-center gap-3 px-4 py-3 text-sm font-semibold text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 border border-blue-100 transition-all hover:-translate-y-0.5">
+                <i class="fa-solid fa-plus"></i>
+                Nova Medicação
+            </a>
+
+            <!-- Botão Novo Lembrete -->
+            <a href="{% url 'criar_lembrete' %}" class="flex items-center justify-center gap-3 px-4 py-3 text-sm font-semibold text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 border border-orange-100 transition-all hover:-translate-y-0.5">
+                <i class="fa-regular fa-clock"></i>
+                Novo Lembrete
+            </a>
+
+            <!-- Botão Atualizar Estoque -->
+            <a href="{% url 'criar_estoque' %}" class="flex items-center justify-center gap-3 px-4 py-3 text-sm font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-all hover:-translate-y-0.5">
+                <i class="fa-solid fa-box-open"></i>
+                Adicionar ao Estoque
+            </a>
+
+        </div>
+    </div>
+{% endblock %}

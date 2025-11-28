@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Meus Lembretes{% endblock %}
+
+{% block header_title %}Gerenciar Lembretes{% endblock %}
+
+{% block content %}
+
+<!-- Cabeçalho da Página com Botão de Ação -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">Lembretes Configurados</h1>
+        <p class="text-slate-500 text-sm">Gerencie os horários e alertas das medicações.</p>
+    </div>
+
+    <a href="{% url 'criar_lembrete' %}" class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors shadow-sm shadow-brand-200">
+        <i class="fa-solid fa-plus"></i>
+        <span>Novo Lembrete</span>
+    </a>
+</div>
+
+<!-- Card da Tabela -->
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500 tracking-wider">
+                    <th class="p-4">
+                        <i class="fa-solid fa-pills mr-1"></i> Medicação
+                    </th>
+                    <!-- NOVA COLUNA -->
+                    <th class="p-4">
+                        <i class="fa-solid fa-user mr-1"></i> Responsável
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-regular fa-clock mr-1"></i> Horário
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-solid fa-bullhorn mr-1"></i> Canal & Tolerância
+                    </th>
+                    <th class="p-4 text-right">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-100">
+                {% for l in lembretes %}
+                <tr class="hover:bg-slate-50 transition-colors group">
+                    
+                    <!-- Coluna Medicação -->
+                    <td class="p-4">
+                        <div class="font-bold text-slate-700">{{ l.medicacao.nome }}</div>
+                    </td>
+
+                    <!-- NOVA COLUNA: Ícone do Responsável -->
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-bold 
+                            {% if l.destinatario == 'joao' %}bg-blue-100 text-blue-700{% else %}bg-purple-100 text-purple-700{% endif %}">
+                            <i class="fa-solid fa-user"></i>
+                            {{ l.get_destinatario_display }}
+                        </span>
+                    </td>
+
+                    <!-- Coluna Horário (Destaque) -->
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center">
+                                <i class="fa-regular fa-bell"></i>
+                            </div>
+                            <span class="font-mono text-lg font-semibold text-slate-800">
+                                {{ l.horario }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <!-- Coluna Configurações -->
+                    <td class="p-4">
+                        <div class="flex flex-col gap-1 items-start">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                                {{ l.canal_preferido }}
+                            </span>
+                            <span class="text-xs text-slate-400 flex items-center gap-1">
+                                <i class="fa-solid fa-hourglass-start"></i>
+                                +{{ l.tolerancia_minutos }} min de tolerância
+                            </span>
+                        </div>
+                    </td>
+
+                    <!-- Coluna Ações -->
+                    <td class="p-4 text-right">
+                        <a href="{% url 'editar_lembrete' l.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 text-slate-500 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent hover:border-brand-200" title="Editar Lembrete">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <!-- Estado Vazio -->
+                <tr>
+                    <td colspan="5" class="p-12 text-center">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-4 text-orange-400 text-2xl">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-slate-800">Sem lembretes ativos</h3>
+                            <p class="text-slate-500 max-w-xs mx-auto mt-1 mb-4 text-sm">
+                                Configure alertas para não esquecer de administrar as medicações no horário correto.
+                            </p>
+                            <a href="{% url 'criar_lembrete' %}" class="text-brand-600 font-medium hover:underline text-sm">
+                                Criar meu primeiro lembrete &rarr;
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

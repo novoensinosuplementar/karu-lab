@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Registros{% endblock %}
+
+{# Título do Header no Base.html #}
+{% block header_title %}Registros de Administração{% endblock %}
+
+{% block content %}
+
+<!-- Barra de Ações (Título + Busca + Filtros) -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">Histórico Completo</h1>
+        <p class="text-slate-500 text-sm">Visualize todas as doses administradas no sistema.</p>
+    </div>
+
+    <!-- Área de Filtros (Visual) -->
+    <div class="flex gap-2 w-full md:w-auto">
+        <div class="relative flex-1 md:w-64">
+            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" placeholder="Buscar por medicamento..." class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 text-sm transition-colors">
+        </div>
+        <button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+            <i class="fa-solid fa-filter"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Container da Tabela -->
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500 tracking-wider">
+                    <th class="p-4 min-w-[200px]">
+                        <i class="fa-solid fa-pills mr-1"></i> Medicação / Origem
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-solid fa-info-circle mr-1"></i> Status
+                    </th>
+                    <th class="p-4">
+                        <i class="fa-regular fa-calendar mr-1"></i> Data e Hora
+                    </th>
+                    <th class="p-4 min-w-[250px]">
+                        <i class="fa-regular fa-comment-dots mr-1"></i> Observações
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-100">
+                {% for r in registros %}
+                <tr class="hover:bg-slate-50 transition-colors group">
+                    
+                    <!-- Nome da Medicação (COM A CORREÇÃO VISUAL) -->
+                    <td class="p-4">
+                        <!-- Lógica: Se for registro de pai (fake), mostra "Via App" em vez do nome do banco -->
+                        {% if "PAI/MÃE" in r.observacoes %}
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-mobile-screen"></i>
+                                </div>
+                                <span class="font-medium text-slate-600">Registro via App</span>
+                            </div>
+                        {% else %}
+                            <div class="font-medium text-slate-800">{{ r.medicacao.nome }}</div>
+                        {% endif %}
+                    </td>
+
+                    <!-- Status com Badge -->
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-brand-50 text-brand-700 border border-brand-100">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+                            {{ r.get_status_display }}
+                        </span>
+                    </td>
+
+                    <!-- Data e Hora -->
+                    <td class="p-4 text-sm text-slate-600">
+                        <div class="flex flex-col">
+                            <span class="font-medium text-slate-700">
+                                {{ r.horario_registro|date:"d/m/Y" }}
+                            </span>
+                            <span class="text-xs text-slate-400">
+                                às {{ r.horario_registro|date:"H:i" }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <!-- Observações -->
+                    <td class="p-4 text-sm text-slate-500">
+                        {% if r.observacoes %}
+                            {{ r.observacoes }}
+                        {% else %}
+                            <span class="italic text-slate-300">Sem observações</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <!-- Estado Vazio -->
+                <tr>
+                    <td colspan="4" class="p-12 text-center">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400 text-2xl">
+                                <i class="fa-regular fa-folder-open"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-slate-800">Nenhum registro encontrado</h3>
+                            <p class="text-slate-500 max-w-sm mx-auto mt-1">
+                                As administrações de medicamentos aparecerão aqui assim que forem registradas.
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex justify-between items-center">
+        <span>Mostrando registros recentes</span>
+        <span>Total: <strong>{{ registros|length }}</strong></span>
+    </div>
+</div>
+
+{% endblock %}
