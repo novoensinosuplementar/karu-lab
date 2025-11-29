@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Gestão{% endblock %}
+
+{% block header_title %}
+<i class="fa-solid fa-chart-line text-brand-600 mr-2"></i> Dashboard de Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-8">
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-brand-600">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-brand-100 p-3 rounded-full text-brand-800">
+                    <i class="fa-solid fa-list-check text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Acompanhamentos</p>
+                    <p class="text-3xl font-bold text-brand-900">{{ total_acompanhamentos }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-600">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-red-100 p-3 rounded-full text-red-800">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total de Alertas</p>
+                    <p class="text-3xl font-bold text-brand-900">{{ total_alertas }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-800">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-red-200 p-3 rounded-full text-red-900">
+                    <i class="fa-solid fa-skull-crossbones text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Alertas Críticos (Não Vistos)</p>
+                    <p class="text-3xl font-bold text-brand-900">{{ alertas_criticos }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-green-100 p-3 rounded-full text-green-800">
+                    <i class="fa-solid fa-percent text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Taxa de Conclusão (Tasks)</p>
+                    <p class="text-3xl font-bold text-brand-900">{{ taxa_conclusao }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg border border-brand-100">
+            <h3 class="text-xl font-semibold text-brand-800 mb-4 border-b pb-2">
+                Visão Geral de Risco (Alertas)
+            </h3>
+            <div class="h-80 flex items-center justify-center text-gray-500 border-2 border-dashed rounded-lg p-4">
+                [Espaço para Gráfico de Barras/Pizza: Nível de Alerta]
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-brand-100">
+            <h3 class="text-xl font-semibold text-brand-800 mb-4 border-b pb-2">
+                Atividade Recente (Respostas)
+            </h3>
+            
+            {% if respostas_recentes %}
+            <ul class="space-y-3">
+                {% for resposta in respostas_recentes %}
+                <li class="p-3 rounded-lg text-sm bg-brand-50 text-brand-700 shadow border border-brand-100">
+
+    <div class="flex justify-between">
+        <div class="w-full">
+            <i class="fa-solid fa-user-check mr-2"></i>
+            <strong>{{ resposta.user.username }}</strong> respondeu:
+            <br>
+
+            <!-- Pergunta -->
+            <span class="text-brand-900 font-semibold block mt-1">
+                "{{ resposta.question.text }}"
+            </span>
+
+            <!-- Nota -->
+            <div class="mt-1">
+                Nota: 
+                <span class="font-bold text-brand-800">
+                    {{ resposta.score }} / 5
+                </span>
+            </div>
+
+            <!-- Comentário com Ver mais -->
+            {% if resposta.comment %}
+            <div class="mt-2">
+
+                <p class="text-gray-700 italic line-clamp-2 overflow-hidden transition-all duration-300"
+                   id="comment-{{ resposta.id }}">
+                    "{{ resposta.comment }}"
+                </p>
+
+                <button onclick="
+                    let el = document.getElementById('comment-{{ resposta.id }}');
+                    if(el.classList.contains('line-clamp-2')){
+                        el.classList.remove('line-clamp-2');
+                        this.innerText = 'Ver menos';
+                    } else {
+                        el.classList.add('line-clamp-2');
+                        this.innerText = 'Ver mais';
+                    }
+                " 
+                class="text-brand-700 font-semibold text-xs mt-1 hover:underline">
+                    Ver mais
+                </button>
+
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Tempo -->
+        <span class="text-xs text-gray-500 text-right ml-3 whitespace-nowrap">
+            {{ resposta.date|timesince }} atrás
+        </span>
+    </div>
+
+</li>
+{% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-center text-gray-500 italic p-4 border-2 border-dashed rounded-lg">
+                Nenhuma resposta encontrada. Cadastre Questionários e Respostas para ver a atividade.
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

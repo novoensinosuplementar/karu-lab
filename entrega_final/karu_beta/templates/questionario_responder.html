@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Responder: {{ questionario.name }}{% endblock %}
+
+{% block header_title %}
+Questionário: {{ questionario.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-6 md:p-8 border border-brand-100">
+
+    <h2 class="text-3xl font-extrabold text-brand-900 mb-2">
+        {{ questionario.name }}
+    </h2>
+    <p class="text-brand-800 mb-8 border-b pb-4 border-brand-100 italic">{{ questionario.description }}</p>
+
+    <form method="POST" class="space-y-8">
+        {% csrf_token %}
+
+        {{ form.questionario_id }}
+
+        <!-- ========================================================= -->
+        <!-- LISTAGEM DE PERGUNTAS DA CATEGORIA                       -->
+        <!-- ========================================================= -->
+
+        {% for pergunta in perguntas %}
+        <div class="bg-brand-50 rounded-xl p-5 border border-brand-100 shadow-sm">
+
+            <label class="block font-semibold text-lg text-brand-900 mb-3">
+                {{ pergunta.text }}
+            </label>
+
+            <!-- SCORE (0–5) -->
+            <input 
+                type="number"
+                name="score_{{ pergunta.id }}"
+                min="0"
+                max="5"
+                required
+                class="w-24 border border-brand-100 rounded-lg p-2 mb-3 focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                value="{{ pergunta.answer_user.score|default:'' }}"
+                placeholder="0 a 5">
+
+            <!-- COMENTÁRIO -->
+            <textarea
+                name="obs_{{ pergunta.id }}"
+                rows="3"
+                class="w-full border border-brand-100 rounded-lg p-3 focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                placeholder="Comentários adicionais">{{ pergunta.answer_user.comment|default:'' }}</textarea>
+
+        </div>
+        {% empty %}
+        <p class="text-brand-700 italic">Nenhuma pergunta cadastrada para esta categoria.</p>
+        {% endfor %}
+
+
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold tracking-wider py-4 rounded-xl shadow-lg hover:bg-brand-800 transition transform hover:scale-[1.005] focus:outline-none focus:ring-4 focus:ring-brand-100">
+            <i class="fa-solid fa-paper-plane mr-2"></i> Enviar Avaliação
+        </button>
+
+    </form>
+</div>
+
+{% endblock content %}

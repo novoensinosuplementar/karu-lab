@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Editar{% else %}Criar{% endif %} Acompanhamento
+{% endblock %}
+
+{% block header_title %}
+<i class="fa-solid fa-clipboard-list text-brand-600 mr-2"></i>
+    {% if form.instance.pk %}
+        Editar Acompanhamento: {{ form.instance.titulo }}
+    {% else %}
+        Novo Acompanhamento
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white shadow-xl rounded-xl p-6 md:p-8 border border-brand-100">
+
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            
+            <!-- Campo Título -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.titulo.label }}
+                </label>
+                {{ form.titulo.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800",
+                    "placeholder": "Insira o título do acompanhamento"
+                }) }}
+                {% if form.titulo.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.titulo.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Campo Descrição -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.descricao.label }}
+                </label>
+                {{ form.descricao.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800",
+                    "rows": "4",
+                    "placeholder": "Detalhes e objetivos"
+                }) }}
+                {% if form.descricao.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.descricao.errors }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-brand-50 p-5 rounded-lg border border-brand-100">
+            
+            <!-- Prioridade -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.prioridade.label }}
+                </label>
+                {{ form.prioridade.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                }) }}
+            </div>
+
+            <!-- Status -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.status.label }}
+                </label>
+                {{ form.status.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                }) }}
+            </div>
+
+            <!-- Responsável -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.responsavel.label }}
+                </label>
+                {{ form.responsavel.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                }) }}
+            </div>
+
+            <!-- Data de Entrega -->
+            <div>
+                <label class="block text-sm font-medium text-brand-900 mb-1">
+                    {{ form.data_entrega.label }}
+                </label>
+                {{ form.data_entrega.as_widget(attrs={
+                    "class": "w-full border border-brand-100 rounded-lg p-3 focus:ring-2 focus:ring-brand-600 focus:border-transparent transition text-brand-800"
+                }) }}
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-4 mt-8">
+            <a href="{% url 'lista_acompanhamentos' %}" 
+               class="px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-xl shadow-md hover:bg-gray-300 transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Voltar
+            </a>
+            
+            <button type="submit" 
+                    class="px-6 py-3 bg-brand-600 text-white font-bold tracking-wider rounded-xl shadow-lg hover:bg-brand-800 transition transform hover:scale-[1.005]">
+                <i class="fa-solid fa-save mr-2"></i> Salvar
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock content %}

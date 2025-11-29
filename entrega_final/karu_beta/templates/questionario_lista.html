@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Questionários Disponíveis{% endblock %}
+
+{% block header_title %}
+Questionários Disponíveis
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+
+    <div class="bg-white p-6 rounded-xl shadow-md border border-brand-100">
+        <h3 class="text-lg font-semibold text-brand-900 mb-3 ">Prezado(a) responsável,</h3>
+        <p class="text-brand-700 leading-relaxed ">
+            Esses questionários são ferramentas <strong>confidenciais e essenciais</strong>  para o
+            acompanhamento do método Canguru. O formulário é curto e garante que nossa equipe possa
+            oferecer o melhor atendimento de acordo com as suas necessidades.
+            <br><br>
+            <strong>Sua saúde e a do bebê são a nossa prioridade.</strong>
+        </p>
+    </div>
+
+    <h3 class="text-xl font-semibold text-brand-900">Selecione um questionário para iniciar:</h3>
+
+    {% for q in questionarios %}
+    <div class="bg-white p-6 rounded-xl shadow-md border border-brand-100 flex justify-between items-center transition-transform hover:shadow-lg hover:scale-[1.005]">
+        <div>
+            <h4 class="text-2xl font-bold text-brand-800">{{ q.name }}</h4>
+            <p class="text-brand-800 mt-1">{{ q.description|default:"Nenhuma descrição disponível." }}</p>
+            <span class="text-sm text-brand-600 font-medium mt-2 block">
+                Frequência: {{ q.frequency }}.
+            </span>
+        </div>
+        
+        <a href="{% url 'questionario_responder' q.pk %}"
+           class="bg-brand-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-brand-800 transition">
+            Responder <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    {% empty %}
+    <div class="bg-white p-6 rounded-xl shadow border border-brand-100 text-center">
+        <p class="text-lg text-brand-800">Nenhum questionário ativo no momento.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

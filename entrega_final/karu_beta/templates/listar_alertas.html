@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Alertas{% endblock %}
+
+{% block header_title %}
+<i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>
+Alertas da Equipe de Acompanhamento
+{% endblock %}
+
+{% block content %}
+
+<h3 class="text-2xl font-bold text-brand-900 mb-6">
+    Alertas Não Visualizados (Prioritários)
+</h3>
+
+{% if alertas_nao_visualizados %}
+<div class="space-y-4">
+    {% for alerta in alertas_nao_visualizados %}
+
+    <div class="{{ alerta.bg }} p-4 rounded-lg border-l-4 {{ alerta.border }} shadow-sm flex items-start">
+
+        <div class="flex-shrink-0 pt-1">
+            <i class="fa-solid fa-bell {{ alerta.text }}"></i>
+        </div>
+
+        <div class="ml-3 flex-1">
+            <p class="text-sm font-semibold {{ alerta.text }}">
+                {{ alerta.get_nivel_display }} —
+                Gerado em: {{ alerta.data|date:"d/m/Y H:i" }}
+            </p>
+
+            <p class="text-lg font-medium text-brand-900">
+                {{ alerta.mensagem }}
+            </p>
+
+            <p class="text-sm {{ alerta.text }} mt-1">
+                Usuário:
+                <span class="font-bold">{{ alerta.user_id }}</span>
+            </p>
+        </div>
+
+        <button class="ml-4 flex-shrink-0 text-sm font-medium {{ alerta.text }} hover:text-brand-900">
+            <i class="fa-solid fa-check-circle"></i> Marcar como Lido
+        </button>
+
+    </div>
+
+    {% empty %}
+    <p class="text-gray-600 text-center">Nenhum alerta disponível.</p>
+    {% endfor %}
+</div>
+{% else %}
+
+<div class="bg-green-50 p-6 rounded-xl border border-green-200 text-center">
+    <p class="text-lg text-green-700 font-medium">
+        🎉 Nenhum alerta de risco pendente!
+    </p>
+</div>
+
+{% endif %}
+
+<!-- ----------- HISTÓRICO ----------- -->
+
+<h3 class="text-2xl font-bold text-brand-900 mt-10 mb-6 border-t pt-6">
+    Histórico Recente
+</h3>
+
+<div class="bg-white shadow-md rounded-xl overflow-hidden">
+
+    <table class="min-w-full divide-y divide-brand-100">
+        <thead class="bg-brand-50">
+            <tr>
+                <th class="px-6 py-3">Nível</th>
+                <th class="px-6 py-3">Usuário</th>
+                <th class="px-6 py-3">Mensagem</th>
+                <th class="px-6 py-3">Data</th>
+            </tr>
+        </thead>
+
+        <tbody class="bg-white divide-y divide-brand-100">
+            {% for alerta in alertas_recentes %}
+            <tr>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full {{ alerta.bg }} {{ alerta.text }}">
+                        {{ alerta.get_nivel_display }}
+                    </span>
+                </td>
+
+                <td class="px-6 py-4">{{ alerta.user_id }}</td>
+
+                <td class="px-6 py-4">{{ alerta.mensagem }}</td>
+
+                <td class="px-6 py-4">{{ alerta.data|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock content %}

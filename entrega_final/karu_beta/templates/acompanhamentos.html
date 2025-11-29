@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Acompanhamentos - Karu{% endblock %}
+
+{% block header_title %}
+Acompanhamentos
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto">
+
+    <!-- Título principal -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-brand-900 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-brand-600"></i>
+            Acompanhamentos
+        </h1>
+
+    </div>
+
+    <!-- Lista -->
+    {% if acompanhamentos %}
+        <div class="space-y-4">
+
+            {% for item in acompanhamentos %}
+                <div class="bg-white p-5 rounded-xl shadow border border-brand-100 hover:shadow-md transition">
+
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+                        <!-- Coluna esquerda -->
+                        <div>
+                            <h2 class="text-lg font-semibold text-brand-900">
+                                {{ item.titulo }}
+                            </h2>
+
+                            <p class="text-sm text-brand-700 mt-1">
+                                Categoria: <span class="font-medium">{{ item.categoria }}</span>
+                            </p>
+
+                            <p class="text-sm text-brand-700">
+                                Criado em: <span class="font-medium">{{ item.data|date:"d/m/Y" }}</span>
+                            </p>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="flex items-center gap-3">
+
+                            {% if item.status == 'pendente' %}
+                                <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">
+                                    <i class="fa-solid fa-clock"></i> Pendente
+                                </span>
+
+                            {% elif item.status == 'em_andamento' %}
+                                <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">
+                                    <i class="fa-solid fa-spinner"></i> Em Andamento
+                                </span>
+
+                            {% elif item.status == 'concluido' %}
+                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+                                    <i class="fa-solid fa-check"></i> Concluído
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Botão -->
+                        <a href="{% url 'ver_acompanhamento' item.id %}"
+                           class="px-4 py-2 bg-brand-600 hover:bg-brand-800 text-white rounded-lg font-medium shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-eye"></i> Ver
+                        </a>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div class="bg-white p-6 rounded-xl shadow text-center border border-brand-100">
+            <i class="fa-solid fa-folder-open text-4xl text-brand-600"></i>
+            <p class="mt-4 text-brand-700">Nenhum acompanhamento criado ainda.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+
+
+

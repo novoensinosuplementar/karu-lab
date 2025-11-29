@@ -1,0 +1,20 @@
+<h1>Alertas do Questionário</h1>
+
+{% if alertas %}
+    {% for item in alertas %}
+        <div style="padding: 10px; border-left: 5px solid red; margin-bottom: 15px;">
+            <h3>{{ item.pergunta }}</h3>
+
+            <p><strong>Média nas últimas 3 semanas:</strong> {{ item.media }}</p>
+
+            <p><strong>Respostas recentes:</strong></p>
+            <ul>
+                {% for r in item.respostas %}
+                    <li>{{ r.date }} — Nota: {{ r.score }} ({{ r.comment|default:"sem comentário" }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>🎉 Nenhum alerta encontrado! Tudo está dentro do esperado.</p>
+{% endif %}

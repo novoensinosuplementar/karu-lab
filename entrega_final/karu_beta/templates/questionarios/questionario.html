@@ -1,0 +1,29 @@
+<h1>Questionário do Bebê Prematuro</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% for q in perguntas %}
+        <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+            <p><strong>{{ q.text }}</strong></p>
+
+            <label>Nota (0 a 5):</label><br>
+            
+            <select name="score_{{ q.id }}" required>
+                <option value="">Selecione</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <br>
+            <label>Comentário adicional (opcional):</label><br>
+            <textarea name="comment_{{ q.id }}" rows="2"></textarea>
+        </div>
+    {% endfor %}
+
+    <button type="submit">Enviar Respostas</button>
+</form>
